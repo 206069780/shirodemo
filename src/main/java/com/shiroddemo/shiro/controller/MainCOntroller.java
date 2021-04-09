@@ -1,15 +1,22 @@
 package com.shiroddemo.shiro.controller;
 
+
+import com.fasterxml.jackson.core.JsonToken;
+import org.apache.catalina.Session;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @PackageName com.shiroddemo.shiro.controller
@@ -67,12 +74,29 @@ public class MainCOntroller {
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password) {
+    public Object login(HttpServletRequest request) {
 
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        subject.login(token);
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password, true);
+        try {
+            subject.login(token);
+            subject.getSession().setAttribute("account", subject.getPrincipal());
+            return "登录成功";
+        } catch (UnknownAccountException e) {
+            return "密码和用户名不正确";
+        } catch (IncorrectCredentialsException e) {
+            return "密码或用户名不正确";
+        } catch (AuthenticationException e) {
+            return "Token 认证失败";
+        }
 
-        return null;
+    }
+
+    @RequestMapping(value = "/eorr", method = RequestMethod.GET)
+    @ResponseBody
+    public Object eorr(){
+        return "eorr";
     }
 }

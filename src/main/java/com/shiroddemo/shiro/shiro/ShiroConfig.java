@@ -3,7 +3,6 @@ package com.shiroddemo.shiro.shiro;
 
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,8 +51,13 @@ public class ShiroConfig {
         /*具有admin的角色才可以访问*/
         permsMap.put("/admin", "roles[admin]");
 
+        /*认证一次后就不需要在验证*/
+        permsMap.put("/hel", "user");
         /*将map注入到 ShiroFilterFactoryBean */
         factoryBean.setFilterChainDefinitionMap(permsMap);
+
+        /*未授权*/
+        factoryBean.setUnauthorizedUrl("/eorr");
         return factoryBean;
     }
 

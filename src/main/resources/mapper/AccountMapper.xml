@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.shiro.shirodemo.mapper.AccountDao">
+<mapper namespace="com.shiroddemo.shiro.mapper.AccountDao">
     <resultMap id="reslt" type="com.shiroddemo.shiro.model.Account">
         <id column="id" property="id"/>
         <id column="usernmae" property="username"/>
@@ -8,6 +8,7 @@
         <id column="perms" property="perms"/>
         <id column="role" property="role"/>
     </resultMap>
+
     <select id="getByName" parameterType="java.lang.String" resultMap="reslt">
         select *
         from user_table
