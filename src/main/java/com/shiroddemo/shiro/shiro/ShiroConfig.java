@@ -30,9 +30,10 @@ public class ShiroConfig {
 
     /**
      * 实现权限控制
-     *      1、authc 必须登录
-     *      2、perms 拥有对应的权限
-     *      3、roles 拥有对应的角色
+     * 1、authc 必须登录
+     * 2、perms 拥有对应的权限
+     * 3、roles 拥有对应的角色
+     *
      * @param securityManager
      * @return
      */
@@ -41,9 +42,17 @@ public class ShiroConfig {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager);
         permsMap = new HashMap<>();
-        permsMap.put("/login","authc");
-        permsMap.put("/root","perms[root]");
-        permsMap.put("/admin","roles[admin]");
+
+        /*登录之后才可访问*/
+        permsMap.put("/loginout", "authc");
+
+        /*具有root权限才可以访问*/
+        permsMap.put("/root", "perms[root]");
+
+        /*具有admin的角色才可以访问*/
+        permsMap.put("/admin", "roles[admin]");
+
+        /*将map注入到 ShiroFilterFactoryBean */
         factoryBean.setFilterChainDefinitionMap(permsMap);
         return factoryBean;
     }
